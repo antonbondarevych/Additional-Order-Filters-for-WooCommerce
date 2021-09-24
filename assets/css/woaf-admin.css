@@ -31,17 +31,17 @@ p.description {
 .cledarfix {
 	clear: both;
 }
-.ant_special_order_filter_wrapper {
+.woaf_special_order_filter_wrapper {
 	display: block;
 	float: left;
 	clear: both;
 	margin: 10px 0;
 }
-.ant_special_order_filter {
+.woaf_special_order_filter {
 	display: none;
 	margin-top: 20px;
 }
-.ant_special_order_filter > ul {
+.woaf_special_order_filter > ul {
 	display: inline-block;
 	vertical-align: top;
 	margin-right: 20px;
@@ -55,13 +55,13 @@ p.description {
 	margin-right: 25px;
 	width: 240px;
 }
-.ant_special_order_filter .order_block_wrapper select {
+.woaf_special_order_filter .order_block_wrapper select {
 	max-width: 100%;
 }
-.ant_special_order_filter .date_range input[type="text"] {
+.woaf_special_order_filter .date_range input[type="text"] {
     min-width: 115px;
 }
-.ant_special_order_filter .date_range input#ant_filter_end_date {
+.woaf_special_order_filter .date_range input#woaf_filter_end_date {
 	float: right !important;
 	margin-right: 0;
 }
@@ -108,12 +108,12 @@ p.description {
 .order_total .inline > input[type="number"] {
 	width: 120px;
 }
-#ant_add_filter {
+#woaf_add_filter {
 	display: inline-block;
 	margin-left: 20px;
 	margin-top: 7px;
 }
-.rtl #ant_add_filter {
+.rtl #woaf_add_filter {
 	margin-right: 20px;
 	margin-top: 7px;
 }
@@ -126,10 +126,10 @@ p.description {
 	display: inline-block;
 	margin-top: 18px;
 }
-.post-type-shop_order .alignleft.actions .ant_special_order_filter_wrapper .select2.select2-container {
+.post-type-shop_order .alignleft.actions .woaf_special_order_filter_wrapper .select2.select2-container {
 	display: block;
 }
-.ant_special_order_filter_wrapper #filter_clear {
+.woaf_special_order_filter_wrapper #filter_clear {
 	margin-left: 10px;
 }
 .table-custom-filters .woaf-add-custom-filter {

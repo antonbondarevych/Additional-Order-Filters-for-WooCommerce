@@ -31,12 +31,14 @@ class AOF_Woo_Additional_Order_Default_Filters {
 
 	protected $woaf_enabled_additional_filters;
 	protected $woaf_default_filters;
+	protected $woaf_custom_filters;
 
 	function __construct() {
 		add_action( 'admin_menu', array( $this,'woaf_add_plugin_settings_page' ) );
 
 		$this->woaf_enabled_additional_filters = AOF_Woo_Additional_Order_Filters_Admin_Options::woaf_enabled_additional_filters();
 		$this->woaf_default_filters = AOF_Woo_Additional_Order_Filters_Admin_Options::woaf_get_filters();
+		$this->woaf_custom_filters = AOF_Woo_Additional_Order_Filters_Admin_Options::woaf_get_custom_filters();
 	}
 
 	public static function get_instance() {
@@ -64,7 +66,7 @@ class AOF_Woo_Additional_Order_Default_Filters {
 
 		if( $typenow == 'shop_order' && empty($enabled_filters) ) {
 			$notice .= '<div class="notice notice-warning">';
-				$notice .= '<p>Enable additional order filters on <a href="options-general.php?page=additional-order-filters">settings page</a> to use them</p>';
+				$notice .= '<p>Enable additional order filters on <a href="admin.php?page=additional-order-filters-woocommerce">settings page</a> to use them</p>';
 			$notice .= '</div>';
 			echo $notice;
 		}
@@ -76,11 +78,11 @@ class AOF_Woo_Additional_Order_Default_Filters {
 		return $links;
 	}
 
-	function woaf_show_button($views) {
+	function woaf_show_button( $views ) {
 		$enabled_filters = $this->woaf_enabled_additional_filters;
 
 		if ( !empty( $enabled_filters ) )
-			echo '<a href="" onclick="event.preventDefault()" id="ant_add_filter" class="button action">Additional Filters</a>';
+			echo '<a href="" onclick="event.preventDefault()" id="woaf_add_filter" class="button action">Additional Filters</a>';
 
 		return $views;
 	}
@@ -97,9 +99,9 @@ class AOF_Woo_Additional_Order_Default_Filters {
 		$enabled_filters = $this->woaf_enabled_additional_filters;
 
 		if ( !empty($filters) && !empty($enabled_filters) ) {
-			$output .= '<div class="ant_special_order_filter_wrapper">';
+			$output .= '<div class="woaf_special_order_filter_wrapper">';
 			$opened = ( isset( $_COOKIE["woaf_additional_order_filter"] ) && $_COOKIE["woaf_additional_order_filter"] == 'opened' ) ? 'style="display:block"' : '';
-			$output .= "<div class='ant_special_order_filter' $opened>";
+			$output .= "<div class='woaf_special_order_filter' $opened>";
 			$per_column = get_option( 'woaf_per_column' );
 			$per_column = ($per_column) ? $per_column : '4';
 			foreach (array_chunk($filters, $per_column, true) as $filter) {
@@ -221,18 +223,18 @@ class AOF_Woo_Additional_Order_Default_Filters {
 						endif;
 						if ( $filter['id'] == 'search_by_sku' ) :
 							$output .= '<div class="order_block_wrapper">';
-								$ant_filter_search_sku = (isset( $_GET['ant_filter_search_sku'] )) ? sanitize_text_field($_GET['ant_filter_search_sku']) : '';
-							$output .= '<label for="ant_filter_search_sku">'.$filter["name"].'</label>';
-							$output .= '<input type="text" value="'.$ant_filter_search_sku.'" name="ant_filter_search_sku" id="ant_filter_search_sku">';
+								$woaf_filter_search_sku = (isset( $_GET['woaf_filter_search_sku'] )) ? sanitize_text_field($_GET['woaf_filter_search_sku']) : '';
+							$output .= '<label for="woaf_filter_search_sku">'.$filter["name"].'</label>';
+							$output .= '<input type="text" value="'.$woaf_filter_search_sku.'" name="woaf_filter_search_sku" id="woaf_filter_search_sku">';
 							$output .= '</div>';
 						endif;
 						if ( $filter['id'] == 'orders_by_date_range' ) :
 							$output .= '<div class="order_block_wrapper date_range">';
-							$output .= '<label for="ant_filter_start_date">'.$filter["name"].'</label>';
-							$from = ( isset($_GET['ant_filter_start_date']) ) ? sanitize_text_field( $_GET['ant_filter_start_date'] ) : '';
-							$to   = ( isset($_GET['ant_filter_end_date']) ) ? sanitize_text_field( $_GET['ant_filter_end_date'] ) : '';
-							$output .= '<input type="text" id="ant_filter_start_date" name="ant_filter_start_date" value="'.$from.'" placeholder="'.__( 'Start date', 'woaf-plugin' ).'">';
-							$output .= '<input type="text" id="ant_filter_end_date" value="'.$to.'" name="ant_filter_end_date" placeholder="'.__( 'End date', 'woaf-plugin' ).'">';
+							$output .= '<label for="woaf_filter_start_date">'.$filter["name"].'</label>';
+							$from = ( isset($_GET['woaf_filter_start_date']) ) ? sanitize_text_field( $_GET['woaf_filter_start_date'] ) : '';
+							$to   = ( isset($_GET['woaf_filter_end_date']) ) ? sanitize_text_field( $_GET['woaf_filter_end_date'] ) : '';
+							$output .= '<input type="text" id="woaf_filter_start_date" name="woaf_filter_start_date" value="'.$from.'" placeholder="'.__( 'Start date', 'woaf-plugin' ).'">';
+							$output .= '<input type="text" id="woaf_filter_end_date" value="'.$to.'" name="woaf_filter_end_date" placeholder="'.__( 'End date', 'woaf-plugin' ).'">';
 							$output .= '</div>';
 						endif;
 						if ( $filter['id'] == 'filter_order_total' ) :
@@ -253,16 +255,42 @@ class AOF_Woo_Additional_Order_Default_Filters {
 						endif;
 					}
 				}
-				$output .= "</div>";
+				$output .= '</div>';
 			}
+
+			//start collect custom users filters
+
+			if ( is_array($this->woaf_custom_filters) && !empty($this->woaf_custom_filters) ) {
+				$output .= '<div class="woaf_custom_orders_filters">';
+					$output .= '<h2>'.__( 'Custom Filters', 'woaf-plugin' ).'</h2>';
+					foreach (array_chunk($this->woaf_custom_filters, $per_column, true) as $filter) {
+						$output .= '<div class="inline_block">';
+
+						foreach ($filter as $filter) {
+							$output .= '<div class="order_block_wrapper">';
+								$filter_search = (isset( $_GET[$filter["filter-field"]] )) ? sanitize_text_field($_GET[$filter["filter-field"]]) : '';
+							$output .= '<label for="user-filter-'.$filter["filter-field"].'">'.$filter["filter-name"].'</label>';
+							$output .= '<input type="text" value="'.$filter_search.'" name="'.$filter["filter-field"].'" id="user-filter-'.$filter["filter-field"].'">';
+							$output .= '</div>';
+
+						}
+						$output .= '</div>'; // .inline_block
+					}
+				$output .= '</div>'; // .woaf_custom_orders_filters
+
+			}
+
+
+
+
 			$output .= '<div class="filter_buttons">';
-			$output .= '<input name="filter_action" class="button" value="'.__( 'Apply Filters', 'woaf-plugin' ).'" type="submit">';
-			$output .= '<input name="filter_clear" class="button" value="'.__( 'Clear', 'woaf-plugin' ).'" id="filter_clear" type="button">';
+				$output .= '<input name="filter_action" class="button" value="'.__( 'Apply Filters', 'woaf-plugin' ).'" type="submit">';
+				$output .= '<input name="filter_clear" class="button" value="'.__( 'Clear', 'woaf-plugin' ).'" id="filter_clear" type="button">';
 			$output .= '</div>';
 			$output .= '<div class="cledarfix"></div>';
 
-			$output .= "</div>"; // .ant_special_order_filter
-			$output .= "</div>"; // .ant_special_order_filter_wrapper
+			$output .= '</div>'; // .woaf_special_order_filter
+			$output .= '</div>'; // .woaf_special_order_filter_wrapper
 		}
 
 		echo $output;
@@ -371,8 +399,8 @@ class AOF_Woo_Additional_Order_Default_Filters {
 					$where .= " AND $wpdb->posts.ID IN (SELECT ".$wpdb->postmeta.".post_id FROM ".$wpdb->postmeta." WHERE meta_key = 'wf_wc_shipment_source' AND meta_value REGEXP '\"shipment_id_cs\";s:" . $filter . "%' )";
 				}
 			}
-			if ( isset( $_GET['ant_filter_search_sku'] ) && !empty( $_GET['ant_filter_search_sku'] ) ) { // search by SKU
-				$filter  = trim($_GET['ant_filter_search_sku']);
+			if ( isset( $_GET['woaf_filter_search_sku'] ) && !empty( $_GET['woaf_filter_search_sku'] ) ) { // search by SKU
+				$filter  = trim($_GET['woaf_filter_search_sku']);
 				$filter  = str_replace(self::$filter_search, self::$filter_replace, $filter);
 				$filter  = $wpdb->_escape($filter);
 
@@ -387,6 +415,24 @@ class AOF_Woo_Additional_Order_Default_Filters {
 				AND $wpdb->postmeta.meta_key = '_sku'
 				AND $wpdb->postmeta.meta_value REGEXP '" . $filter . "') )";
 			}
+
+			//handle custom user filters
+			if ( is_array($this->woaf_custom_filters) && !empty($this->woaf_custom_filters) ) {
+				foreach ($this->woaf_custom_filters as $user_filter) {
+					if ( isset( $_GET[$user_filter['filter-field']] ) && !empty( $_GET[$user_filter['filter-field']] ) ) {
+						$filter = trim( sanitize_text_field( $_GET[$user_filter['filter-field']]) );
+						$filter = str_replace(self::$filter_search, self::$filter_replace, $filter);
+						$filter = $wpdb->_escape($filter);
+
+						$statement = $this->woaf_get_correct_filter_statement( $user_filter['filter-statement'] );
+
+						var_dump($statement);
+
+						$where .= " AND $wpdb->posts.ID IN (SELECT ".$wpdb->postmeta.".post_id FROM ".$wpdb->postmeta." WHERE meta_key = '" . $user_filter['filter-field'] . "' AND meta_value $statement '" . $filter . "' )";
+
+					}
+				}
+			}
 		}
 		return $where;
 	}
@@ -398,11 +444,11 @@ class AOF_Woo_Additional_Order_Default_Filters {
 			is_admin()
 			&& $wp_query->is_main_query()
 			&& isset($_GET['post_type']) && sanitize_text_field($_GET['post_type']) =='shop_order' 
-			&& ! empty( $_GET['ant_filter_start_date'] )
-			&& ! empty( $_GET['ant_filter_end_date'] )
+			&& ! empty( $_GET['woaf_filter_start_date'] )
+			&& ! empty( $_GET['woaf_filter_end_date'] )
 		) {
-			$from = explode( '/', sanitize_text_field( $_GET['ant_filter_start_date'] ) );
-			$to   = explode( '/', sanitize_text_field( $_GET['ant_filter_end_date'] ) );
+			$from = explode( '/', sanitize_text_field( $_GET['woaf_filter_start_date'] ) );
+			$to   = explode( '/', sanitize_text_field( $_GET['woaf_filter_end_date'] ) );
 
 			$from = array_map( 'intval', $from );
 			$to   = array_map( 'intval', $to );
@@ -435,6 +481,19 @@ class AOF_Woo_Additional_Order_Default_Filters {
 			);
 		}
 		return $wp_query;
+	}
+
+	function woaf_get_correct_filter_statement( $statement ) {
+		switch ($statement) {
+			case 'equal':
+				$statement = 'LIKE';
+				break;
+			case 'like':
+				$statement = 'REGEXP';
+				break;
+		}
+
+		return $statement;
 	}
 }
 

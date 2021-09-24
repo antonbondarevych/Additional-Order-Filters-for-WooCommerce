@@ -130,6 +130,8 @@ class AOF_Woo_Additional_Order_Filters_Admin_Options {
 
 		$filters = $this->woaf_get_custom_filters();
 
+		echo '<pre style="direction: ltr;">'; print_r($filters); echo '</pre>';
+
 		$output = '<div class="wrap">';
 		$output .= '<h1>'.get_admin_page_title().'</h1>';
 			$output .= '<form action="'.$_SERVER['PHP_SELF'].'?page=сustom-additional-order-filters&update=true" name="woaf-сustom-additional-order-filters" id="woaf-сustom-additional-order-filters" method="POST">';
@@ -144,9 +146,7 @@ class AOF_Woo_Additional_Order_Filters_Admin_Options {
 							$output .= '<th>Name of field</th>';
 						$output .= '</tr>';
 					$output .= '</thead>';
-					if ( $filters ) {
-						unset($filters['ID']);
-						unset($filters['filter']);
+					if ( !empty($filters) && is_array($filters) ) {
 						$statements = $this->get_custom_field_statements();
 						foreach ($filters as $count => $filter) {
 							$output .= '<tr>';
@@ -234,8 +234,11 @@ class AOF_Woo_Additional_Order_Filters_Admin_Options {
 		return $filters;
 	}
 
-	function woaf_get_custom_filters() {
+	public static function woaf_get_custom_filters() {
 		$custom_filters = get_option('woaf_custom_filters');
+		//remove extra data
+		unset($custom_filters['ID']);
+		unset($custom_filters['filter']);
 
 		return $custom_filters;
 	}
