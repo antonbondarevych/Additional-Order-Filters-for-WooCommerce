@@ -27,6 +27,9 @@ if ( ! defined( 'ABSPATH' ) ) exit();
  **/
 if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', get_option( 'active_plugins' ) ) ) ) {
 
+	define('WOAF_PLUGIN_DOMAIN', 'additional-order-filters-for-woocommerce');
+	define('WOAF_PLUGIN_DIR', plugin_dir_path( __FILE__ ));
+
 	// load classes
 	require_once( plugin_dir_path( __FILE__ ) . 'includes/class-waof.php' );
 	require_once( plugin_dir_path( __FILE__ ) . 'includes/class-waof-admin-options.php' );

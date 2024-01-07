@@ -70,7 +70,7 @@ p.description {
 }
 .order_block_wrapper > * {
 	display: block;
-	float: none !important;
+	float: none;
 	width: 100%;
 	min-width: 180px;
 }
@@ -108,12 +108,12 @@ p.description {
 .order_total .inline > input[type="number"] {
 	width: 120px;
 }
-#woaf_add_filter {
+#woaf_show_filters {
 	display: inline-block;
 	margin-left: 20px;
 	margin-top: 7px;
 }
-.rtl #woaf_add_filter {
+.rtl #woaf_show_filters {
 	margin-right: 20px;
 	margin-top: 7px;
 }
@@ -137,11 +137,28 @@ p.description {
 }
 .table-custom-filters th,
 .table-custom-filters td {
-	width: 33.3333%
+	width: 25%
 }
 .table-custom-filters tbody input {
 	width: 100%;
 }
 .table-custom-filters tbody input.error {
 	border: 1px solid #f00;
+}
+.table-custom-filters td select.select2 {
+	width: 100%;
+}
+.text-center,
+.widefat th.text-center {
+	text-align: center;
+}
+.woaf_custom_orders_filters h2 {
+	margin-bottom: 20px;
+	font-size: 1.5em;
+}
+.woaf_special_order_filter .select2-selection__choice__display {
+	padding-left: 15px !important;
+}
+.woaf_special_order_filter .select2-container--default .select2-selection--multiple .select2-selection__choice__remove {
+	padding: 2px 4px;
 }

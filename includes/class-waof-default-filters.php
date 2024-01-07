@@ -82,7 +82,7 @@ class AOF_Woo_Additional_Order_Default_Filters {
 		$enabled_filters = $this->woaf_enabled_additional_filters;
 
 		if ( !empty( $enabled_filters ) )
-			echo '<a href="" onclick="event.preventDefault()" id="woaf_add_filter" class="button action">Additional Filters</a>';
+			echo '<a href="" onclick="event.preventDefault()" id="woaf_show_filters" class="button action">'.__( 'Additional Filters', 'woaf-plugin' ).'</a>';
 
 		return $views;
 	}
@@ -95,13 +95,14 @@ class AOF_Woo_Additional_Order_Default_Filters {
 
 		global $wpdb;
 		$output = '';
-		$filters = $this->woaf_default_filters;
+		// $filters = $this->woaf_default_filters;
+		$filters = AOF_Woo_Additional_Order_Filters_Admin_Options::woaf_get_filters();
 		$enabled_filters = $this->woaf_enabled_additional_filters;
 
 		if ( !empty($filters) && !empty($enabled_filters) ) {
 			$output .= '<div class="woaf_special_order_filter_wrapper">';
-			$opened = ( isset( $_COOKIE["woaf_additional_order_filter"] ) && $_COOKIE["woaf_additional_order_filter"] == 'opened' ) ? 'style="display:block"' : '';
-			$output .= "<div class='woaf_special_order_filter' $opened>";
+			$open = ( isset( $_COOKIE["woaf_additional_order_filter"] ) && $_COOKIE["woaf_additional_order_filter"] == 'open' ) ? 'style="display:block"' : '';
+			$output .= "<div class='woaf_special_order_filter' $open>";
 			$per_column = get_option( 'woaf_per_column' );
 			$per_column = ($per_column) ? $per_column : '4';
 			foreach (array_chunk($filters, $per_column, true) as $filter) {
@@ -263,25 +264,23 @@ class AOF_Woo_Additional_Order_Default_Filters {
 			if ( is_array($this->woaf_custom_filters) && !empty($this->woaf_custom_filters) ) {
 				$output .= '<div class="woaf_custom_orders_filters">';
 					$output .= '<h2>'.__( 'Custom Filters', 'woaf-plugin' ).'</h2>';
+					$count = 0;
 					foreach (array_chunk($this->woaf_custom_filters, $per_column, true) as $filter) {
 						$output .= '<div class="inline_block">';
-
 						foreach ($filter as $filter) {
 							$output .= '<div class="order_block_wrapper">';
-								$filter_search = (isset( $_GET[$filter["filter-field"]] )) ? sanitize_text_field($_GET[$filter["filter-field"]]) : '';
-							$output .= '<label for="user-filter-'.$filter["filter-field"].'">'.$filter["filter-name"].'</label>';
-							$output .= '<input type="text" value="'.$filter_search.'" name="'.$filter["filter-field"].'" id="user-filter-'.$filter["filter-field"].'">';
+								$filter_search = (isset( $_GET[$filter['filter-field']] )) ? sanitize_text_field($_GET[$filter['filter-field']]) : '';
+							$output .= '<label for="user-filter-'.$filter['filter-field'].'-'.$count.'">'.$filter["filter-name"].'</label>';
+							$output .= '<input type="text" value="'.$filter_search.'" name="'.$filter['filter-field'].'" id="user-filter-'.$filter['filter-field'].'-'.$count.'">';
 							$output .= '</div>';
 
+							$count++;
 						}
 						$output .= '</div>'; // .inline_block
 					}
 				$output .= '</div>'; // .woaf_custom_orders_filters
 
 			}
-
-
-
 
 			$output .= '<div class="filter_buttons">';
 				$output .= '<input name="filter_action" class="button" value="'.__( 'Apply Filters', 'woaf-plugin' ).'" type="submit">';
@@ -426,10 +425,7 @@ class AOF_Woo_Additional_Order_Default_Filters {
 
 						$statement = $this->woaf_get_correct_filter_statement( $user_filter['filter-statement'] );
 
-						var_dump($statement);
-
 						$where .= " AND $wpdb->posts.ID IN (SELECT ".$wpdb->postmeta.".post_id FROM ".$wpdb->postmeta." WHERE meta_key = '" . $user_filter['filter-field'] . "' AND meta_value $statement '" . $filter . "' )";
-
 					}
 				}
 			}

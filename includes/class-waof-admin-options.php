@@ -38,13 +38,13 @@ class AOF_Woo_Additional_Order_Filters_Admin_Options {
 	}
 
 	function woaf_register_admin_menu_page() {
-		add_menu_page( 'Additional Filters', 'Order Filters', 'manage_options', 'additional-order-filters-woocommerce', false, 'dashicons-list-view', 58);
+		add_menu_page( 'Additional Filters', __( 'Filters of Orders', 'woaf-plugin' ), 'manage_options', 'additional-order-filters-woocommerce', false, 'dashicons-list-view', 58);
 	}
 
 	function woaf_add_plugin_settings_page() {
-		add_submenu_page( 'additional-order-filters-woocommerce', 'Default Additional Order Filters', 'Default Additional Order Filters', 'manage_options', 'additional-order-filters-woocommerce', array( $this, 'woaf_show_default_filters_settings' ) );
+		add_submenu_page( 'additional-order-filters-woocommerce', __( 'Default Additional Order Filters', 'woaf-plugin' ), __( 'Default Additional Order Filters', 'woaf-plugin' ), 'manage_options', 'additional-order-filters-woocommerce', array( $this, 'woaf_show_default_filters_settings' ) );
 
-		add_submenu_page( 'additional-order-filters-woocommerce', 'Custom Additional Order Filters', 'Custom Additional Order Filters', 'manage_options', 'сustom-additional-order-filters', array( $this, 'woaf_show_custom_filters_settings' ) );
+		add_submenu_page( 'additional-order-filters-woocommerce', __( 'Custom Additional Order Filters', 'woaf-plugin' ), __( 'Custom Additional Order Filters', 'woaf-plugin' ), 'manage_options', 'сustom-additional-order-filters', array( $this, 'woaf_show_custom_filters_settings' ) );
 	}
 
 	function woaf_saving_default_filters_settings() {
@@ -118,7 +118,7 @@ class AOF_Woo_Additional_Order_Filters_Admin_Options {
 		if ( $save_settings ) {
 			$output .= '<p class="set_saved">Settings saved</p>';
 		}
-		$output .= '<input name="ant_waof_save_settings" id="submit" class="button button-primary" value="Save Changes" type="submit">';
+		$output .= '<input name="ant_waof_save_settings" id="submit" class="button button-primary" value="'.__( 'Save Changes', 'woaf-plugin' ).'" type="submit">';
 		$output .= '</form>';
 		$output .= '</div>'; // .wrap
 
@@ -130,8 +130,6 @@ class AOF_Woo_Additional_Order_Filters_Admin_Options {
 
 		$filters = $this->woaf_get_custom_filters();
 
-		echo '<pre style="direction: ltr;">'; print_r($filters); echo '</pre>';
-
 		$output = '<div class="wrap">';
 		$output .= '<h1>'.get_admin_page_title().'</h1>';
 			$output .= '<form action="'.$_SERVER['PHP_SELF'].'?page=сustom-additional-order-filters&update=true" name="woaf-сustom-additional-order-filters" id="woaf-сustom-additional-order-filters" method="POST">';
@@ -141,17 +139,19 @@ class AOF_Woo_Additional_Order_Filters_Admin_Options {
 				$output .= '<table class="widefat table-custom-filters">';
 					$output .= '<thead>';
 						$output .= '<tr>';
-							$output .= '<th>Name of filter</th>';
-							$output .= '<th>Statement</th>';
-							$output .= '<th>Name of field</th>';
+							$output .= '<th>'.__('Name of filter', 'woaf-plugin').'</th>';
+							$output .= '<th class="text-center">'.__('Statement', 'woaf-plugin').'</th>';
+							$output .= '<th>'.__('Name of field', 'woaf-plugin').'</th>';
+							$output .= '<th class="text-center">'.__('Remove', 'woaf-plugin').'</th>';
 						$output .= '</tr>';
 					$output .= '</thead>';
 					if ( !empty($filters) && is_array($filters) ) {
 						$statements = $this->get_custom_field_statements();
+						$i = 0;
 						foreach ($filters as $count => $filter) {
 							$output .= '<tr>';
-								$output .= '<td><input type="text" name="filter_rows['.$count.'][filter-name]" value="'.$filter['filter-name'].'" placeholder="Filter name"></td>';
-								$output .= '<td><select name="filter_rows['.$count.'][filter-statement]">';
+								$output .= '<td><input type="text" data-name="filter-name" name="filter_rows['.$i.'][filter-name]" value="'.$filter['filter-name'].'" placeholder="Filter name"></td>';
+								$output .= '<td class="text-center"><select data-name="filter-statement" name="filter_rows['.$i.'][filter-statement]">';
 									foreach ($statements as $key => $stat) {
 										if ( $filter['filter-statement'] == $key ) 
 											$output .= '<option value="'.$key.'" selected="selected">'.$stat.'</option>';
@@ -159,21 +159,30 @@ class AOF_Woo_Additional_Order_Filters_Admin_Options {
 											$output .= '<option value="'.$key.'">'.$stat.'</option>';
 									}
 								$output .= '</select></td>';
-								$output .= '<td><input type="text" name="filter_rows['.$count.'][filter-field]" value="'.$filter['filter-field'].'" placeholder="Name of field"></td>';
+								$output .= '<td><select class="select2" data-name="filter-field" name="filter_rows['.$i.'][filter-field]" id="filter_rows['.$i.'][filter-field]">';
+
+									if ( $filter['filter-field'] ) {
+										$output .= '<option value="'.$filter['filter-field'].'" selected="selected">'.$filter['filter-field'].'</option>';
+									}
+
+									$output .= '</select></td>';
+								$output .= '<td class="text-center"><a href="#" class="remove_row"><span class="dashicons dashicons-no"></span></a></td>';
 							$output .= '</tr>';
+
+							$i++;
 						}
 					} else {
 						$output .= '<tbody>
 										<tr>
-											<td class="woaf-custom-filter-blank-state" colspan="4"><p>No custom filters have been added.</p></td>
+											<td class="woaf-custom-filter-blank-state" colspan="4"><p>'.__('No custom filters have been added.', 'woaf-plugin').'</p></td>
 										</tr>
 									</tbody>';
 					}
 					$output .= '<tfoot>
 									<tr>
 										<td colspan="4">
-											<button type="submit" name="save" class="button button-primary woaf-save-custom-filters" value="woaf-save-custom-filters">Save custom filters</button>
-											<a class="button button-secondary woaf-add-custom-filter" href="#">Add custom filter</a>
+											<button type="submit" name="save" class="button button-primary woaf-save-custom-filters" value="woaf-save-custom-filters">'.__('Save custom filters', 'woaf-plugin').'</button>
+											<a class="button button-secondary woaf-add-custom-filter" href="#">'.__('Add custom filter', 'woaf-plugin').'</a>
 										</td>
 									</tr>
 								</tfoot>';
@@ -181,6 +190,14 @@ class AOF_Woo_Additional_Order_Filters_Admin_Options {
 			$output .= '</form>';
 
 		$output .= '</div>'; // .wrap
+
+		$order_keys_json = $this->get_existing_order_keys_json();
+
+		if ( $order_keys_json ) {
+			$output .= '<script>var order_keys_json = '.json_encode($order_keys_json).' ;</script>';
+		}
+
+		// echo '<pre style="direction: ltr;">'; print_r($keys_json); echo '</pre>';
 
 		echo $output;
 	}
@@ -236,6 +253,8 @@ class AOF_Woo_Additional_Order_Filters_Admin_Options {
 
 	public static function woaf_get_custom_filters() {
 		$custom_filters = get_option('woaf_custom_filters');
+		if ( empty($custom_filters) )
+			return;
 		//remove extra data
 		unset($custom_filters['ID']);
 		unset($custom_filters['filter']);
@@ -244,21 +263,16 @@ class AOF_Woo_Additional_Order_Filters_Admin_Options {
 	}
 
 	function woaf_saving_custom_filters_settings() {
-		
 		if ( isset($_POST['save']) && $_POST['save'] == 'woaf-save-custom-filters' ) {
 			if ( function_exists('waof_save_custom_filters_settings') ) {
 				check_admin_referer('waof_save_custom_filters_settings');
 			}
 			if ( !empty($_POST['filter_rows']) ) {
 				$filter_rows = sanitize_post( $_POST['filter_rows'], 'db' );
-
 				update_option( 'woaf_custom_filters', $filter_rows );
-
 			} else {
 				update_option( 'woaf_custom_filters', '' );
 			}
-
-			
 
 			// if ( !empty($_POST['filters']) ) {
 			// 	$enabled_filters = $_POST['filters'];
@@ -286,6 +300,7 @@ class AOF_Woo_Additional_Order_Filters_Admin_Options {
 
 	public static function woaf_get_filters() {
 		$filters = array();
+		// var_dump(__( 'Order Statuses', 'woaf-plugin' ));
 		//$filters[0]['name'] = 'Order Statuses';
 		$filters[0]['name'] = __( 'Order Statuses', 'woaf-plugin' );
 		$filters[0]['id']   = 'order_statuses';
@@ -350,6 +365,34 @@ class AOF_Woo_Additional_Order_Filters_Admin_Options {
 		return $statements;
 	}
 
+	function get_existing_order_keys_json() {
+		$last_order = $this->get_last_order_id();
+
+		$fields_of_order = get_post_custom($last_order);
+		$json = array();
+
+		if ( is_array($fields_of_order) ) {
+			foreach ($fields_of_order as $key => $field) {
+				$json[] = $key;
+			}
+		}
+
+		return $json;
+	}
+
+	function get_last_order_id(){
+		global $wpdb;
+		$statuses = array_keys(wc_get_order_statuses());
+		$statuses = implode( "','", $statuses );
+
+		// Getting last Order ID (max value)
+		$results = $wpdb->get_col( "
+			SELECT MAX(ID) FROM {$wpdb->prefix}posts
+			WHERE post_type LIKE 'shop_order'
+			AND post_status IN ('$statuses')
+		" );
+		return reset($results);
+	}
 }
 
 new AOF_Woo_Additional_Order_Filters_Admin_Options();

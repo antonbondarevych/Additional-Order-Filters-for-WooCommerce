@@ -1,8 +1,8 @@
 === Additional Order Filters for WooCommerce ===
 Tags: woocommerce, woocommerce filters, woocommerce order, filters, order
-Tested up to: 5.6
+Tested up to: 6.4.2
 Requires at least: 4.6
-Stable tag: 1.10
+Stable tag: 1.11
 Requires WooCommerce at least: 3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -23,12 +23,14 @@ Plugin allows you to search by next filters:
 	<li>Order price total</li>
 </ul>
 
+You also can set your own custom order filters based on order meta fields. This can be any order field, including other plugins.
+
 Absolutely free. Let's try it!
 
 == Installation ==
 
 1. Install and activate the plugin through the 'Plugins' screen in WordPress
-2. Use the Settings->Additional Order Filters Settings screen to configure the plugin
+2. You can set up your filters in admin dashboard area using Filters of Orders tab
 
 == Frequently Asked Questions ==
 
@@ -58,6 +60,11 @@ To contact the author by email antonbondarevych.fruitit@gmail.com
 
 
 == Changelog ==
+
+= 1.11 =
+* Plugin architecture changed
+* Code optimization
+* Added user custom order filters
 
 = 1.10 =
 * Fixed bugs in code
