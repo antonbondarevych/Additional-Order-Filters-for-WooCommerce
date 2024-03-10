@@ -6,8 +6,6 @@
  * @package   Additional Order Filters for WooCommerce
  * @author    Anton Bond facebook.com/antonbondarevych
  * @license   GPL-2.0+
- * @link      http://woocommerce.com/
- * @copyright 2021 WooCommerce
  * @since     1.11
  */
 
@@ -36,7 +34,6 @@ class AOF_Woo_Additional_Order_Filters {
 		}
 		return self::$instance;
 	}
-
 
 	function woaf_load_textdomain() {
 		$locale = apply_filters( 'plugin_locale', get_locale(), WOAF_PLUGIN_DOMAIN );

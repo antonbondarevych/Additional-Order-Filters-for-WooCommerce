@@ -3,7 +3,7 @@ if ( ! defined( 'ABSPATH' ) ) exit();
 /*
 	Plugin Name: Additional Order Filters for WooCommerce
 	Description: Adds additional order filters for WooCommerce
-	Version: 1.11
+	Version: 1.12
 	Author: Anton Bond
 	Author URI: facebook.com/antonbondarevych
 	License: GPL2
@@ -38,7 +38,6 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 } else {
 	add_action( 'admin_notices', 'woaf_woocoommerce_deactivated' );
 }
-
 
 /**
 * WooCommerce Deactivated Notice

@@ -6,8 +6,6 @@
  * @package   Additional Order Filters for WooCommerce
  * @author    Anton Bond facebook.com/antonbondarevych
  * @license   GPL-2.0+
- * @link      http://woocommerce.com/
- * @copyright 2021 WooCommerce
  * @since     1.11
  */
 
@@ -55,7 +53,7 @@ class AOF_Woo_Additional_Order_Filters_Admin_Options {
 			if ( !empty($_POST['filters']) ) {
 				$enabled_filters = $_POST['filters'];
 
-				$filters = array();
+				$filters = [];
 				foreach ($enabled_filters as $filter) {
 					$filters[] = sanitize_text_field( $filter );
 				}
@@ -83,7 +81,7 @@ class AOF_Woo_Additional_Order_Filters_Admin_Options {
 		$output .= '<h1>'.get_admin_page_title().'</h1>';
 		$output .= '<p>'.__( 'Active filters:', 'woaf-plugin' ).'</p>';
 
-		$output .= '<form action="'.$_SERVER['PHP_SELF'].'?page=additional-order-filters-woocommerce&update=true" method="POST" id="ant_waof_save_settings">';
+		$output .= '<form action="'.htmlspecialchars($_SERVER['PHP_SELF'], ENT_QUOTES, 'utf-8').'?page=additional-order-filters-woocommerce&update=true" method="POST" id="ant_waof_save_settings">';
 		if ( function_exists('wp_nonce_field') ) {
 			$output .= wp_nonce_field('ant_waof_save_settings');
 		}
@@ -132,7 +130,7 @@ class AOF_Woo_Additional_Order_Filters_Admin_Options {
 
 		$output = '<div class="wrap">';
 		$output .= '<h1>'.get_admin_page_title().'</h1>';
-			$output .= '<form action="'.$_SERVER['PHP_SELF'].'?page=сustom-additional-order-filters&update=true" name="woaf-сustom-additional-order-filters" id="woaf-сustom-additional-order-filters" method="POST">';
+			$output .= '<form action="'.htmlspecialchars($_SERVER['PHP_SELF'], ENT_QUOTES, 'utf-8').'?page=сustom-additional-order-filters&update=true" name="woaf-сustom-additional-order-filters" id="woaf-сustom-additional-order-filters" method="POST">';
 				if ( function_exists('wp_nonce_field') ) {
 					$output .= wp_nonce_field('waof_save_custom_filters_settings');
 				}
@@ -197,14 +195,11 @@ class AOF_Woo_Additional_Order_Filters_Admin_Options {
 			$output .= '<script>var order_keys_json = '.json_encode($order_keys_json).' ;</script>';
 		}
 
-		// echo '<pre style="direction: ltr;">'; print_r($keys_json); echo '</pre>';
-
 		echo $output;
 	}
 
 	function woaf_get_defaul_filters() {
 		$filters = array();
-		//$filters[0]['name'] = 'Order Statuses';
 		$filters[0]['name'] = __( 'Order Statuses', 'woaf-plugin' );
 		$filters[0]['id']   = 'order_statuses';
 
@@ -273,35 +268,12 @@ class AOF_Woo_Additional_Order_Filters_Admin_Options {
 			} else {
 				update_option( 'woaf_custom_filters', '' );
 			}
-
-			// if ( !empty($_POST['filters']) ) {
-			// 	$enabled_filters = $_POST['filters'];
-
-			// 	$filters = array();
-			// 	foreach ($enabled_filters as $filter) {
-			// 		$filters[] = sanitize_text_field( $filter );
-			// 	}
-			// }
-
-			// if ( !empty($_POST['woaf_per_column']) ) {
-			// 	if ( is_numeric($_POST['woaf_per_column']) ) {
-			// 		sanitize_text_field( update_option( 'woaf_per_column', $_POST['woaf_per_column'] ) );
-			// 	}
-			// }
-
-			// if ( !empty($filters) )
-			// 	update_option( 'ant_additional_order_enabled_filters', serialize( $filters ) );
-			// else
-			// 	update_option( 'ant_additional_order_enabled_filters', '' );
-
-			// return true;
 		}
 	}
 
 	public static function woaf_get_filters() {
-		$filters = array();
-		// var_dump(__( 'Order Statuses', 'woaf-plugin' ));
-		//$filters[0]['name'] = 'Order Statuses';
+		$filters = [];
+
 		$filters[0]['name'] = __( 'Order Statuses', 'woaf-plugin' );
 		$filters[0]['id']   = 'order_statuses';
 
@@ -369,7 +341,7 @@ class AOF_Woo_Additional_Order_Filters_Admin_Options {
 		$last_order = $this->get_last_order_id();
 
 		$fields_of_order = get_post_custom($last_order);
-		$json = array();
+		$json = [];
 
 		if ( is_array($fields_of_order) ) {
 			foreach ($fields_of_order as $key => $field) {

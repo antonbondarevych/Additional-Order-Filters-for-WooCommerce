@@ -2,7 +2,7 @@
 Tags: woocommerce, woocommerce filters, woocommerce order, filters, order
 Tested up to: 6.4.2
 Requires at least: 4.6
-Stable tag: 1.11
+Stable tag: 1.12
 Requires WooCommerce at least: 3.0
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
@@ -60,6 +60,10 @@ To contact the author by email antonbondarevych.fruitit@gmail.com
 
 
 == Changelog ==
+
+= 1.12 =
+* Code optimization
+* XSS vulnerable fixed
 
 = 1.11 =
 * Plugin architecture changed

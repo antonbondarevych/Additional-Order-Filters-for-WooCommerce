@@ -6,8 +6,6 @@
  * @package   Additional Order Filters for WooCommerce
  * @author    Anton Bond facebook.com/antonbondarevych
  * @license   GPL-2.0+
- * @link      http://woocommerce.com/
- * @copyright 2021 WooCommerce
  * @since     1.11
  */
 
@@ -49,23 +47,20 @@ class AOF_Woo_Additional_Order_Default_Filters {
 	}
 
 	function woaf_add_plugin_settings_page() {
-
 		add_action( 'admin_notices', array( $this, 'waof_woocommerce_settings_check' ) );
 		add_action( 'views_edit-shop_order', array( $this, 'woaf_show_button' ), 2000, 2000 );
 		add_action( 'restrict_manage_posts', array( $this, 'woaf_show_filters' ), 2000, 2000 );
 		add_action( 'posts_where', array( $this, 'woaf_where_plugin_functions' ) );
 		add_filter( 'pre_get_posts', array( $this, 'woaf_filter_date_range' ) );
 		add_filter( 'plugin_action_links_'.plugin_basename( __FILE__ ).'', array( $this, 'waof_plugin_add_settings_link' ) );
-		
 	}
 
 	function waof_woocommerce_settings_check() {
 		global $typenow;
-
 		$enabled_filters = $this->woaf_enabled_additional_filters;
 
 		if( $typenow == 'shop_order' && empty($enabled_filters) ) {
-			$notice .= '<div class="notice notice-warning">';
+			$notice = '<div class="notice notice-warning">';
 				$notice .= '<p>Enable additional order filters on <a href="admin.php?page=additional-order-filters-woocommerce">settings page</a> to use them</p>';
 			$notice .= '</div>';
 			echo $notice;
@@ -93,7 +88,6 @@ class AOF_Woo_Additional_Order_Default_Filters {
 			return false;
 		}
 
-		global $wpdb;
 		$output = '';
 		// $filters = $this->woaf_default_filters;
 		$filters = AOF_Woo_Additional_Order_Filters_Admin_Options::woaf_get_filters();
@@ -260,7 +254,6 @@ class AOF_Woo_Additional_Order_Default_Filters {
 			}
 
 			//start collect custom users filters
-
 			if ( is_array($this->woaf_custom_filters) && !empty($this->woaf_custom_filters) ) {
 				$output .= '<div class="woaf_custom_orders_filters">';
 					$output .= '<h2>'.__( 'Custom Filters', 'woaf-plugin' ).'</h2>';
@@ -279,7 +272,6 @@ class AOF_Woo_Additional_Order_Default_Filters {
 						$output .= '</div>'; // .inline_block
 					}
 				$output .= '</div>'; // .woaf_custom_orders_filters
-
 			}
 
 			$output .= '<div class="filter_buttons">';
@@ -434,8 +426,6 @@ class AOF_Woo_Additional_Order_Default_Filters {
 	}
 
 	function woaf_filter_date_range( $wp_query ) {
-		global $pagenow;
-
 		if (
 			is_admin()
 			&& $wp_query->is_main_query()
@@ -449,10 +439,7 @@ class AOF_Woo_Additional_Order_Default_Filters {
 			$from = array_map( 'intval', $from );
 			$to   = array_map( 'intval', $to );
 
-			if (
-				3 === count( $to )
-				&& 3 === count( $from )
-			) {
+			if ( 3 === count( $to )	&& 3 === count( $from ) ) {
 				list( $year_from, $month_from, $day_from ) = $from;
 				list( $year_to, $month_to, $day_to )       = $to;
 			} else {
@@ -488,7 +475,6 @@ class AOF_Woo_Additional_Order_Default_Filters {
 				$statement = 'REGEXP';
 				break;
 		}
-
 		return $statement;
 	}
 }
