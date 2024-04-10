@@ -9,9 +9,7 @@
  * @since     1.11
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
-}
+defined( 'ABSPATH' ) || exit;
 
 /**
  * AOF Admin options Class
@@ -24,8 +22,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 class AOF_Woo_Additional_Order_Filters_Admin_Options {
 
 	function __construct() {
-		add_action( 'admin_menu', array( $this, 'woaf_register_admin_menu_page' ) );
-		add_action( 'admin_menu', array( $this, 'woaf_add_plugin_settings_page' ) );
+		add_action( 'admin_menu', [$this, 'woaf_register_admin_menu_page'] );
+		add_action( 'admin_menu', [$this, 'woaf_add_plugin_settings_page'] );
 	}
 
 	public static function get_instance() {
@@ -42,7 +40,7 @@ class AOF_Woo_Additional_Order_Filters_Admin_Options {
 	function woaf_add_plugin_settings_page() {
 		add_submenu_page( 'additional-order-filters-woocommerce', __( 'Default Additional Order Filters', 'woaf-plugin' ), __( 'Default Additional Order Filters', 'woaf-plugin' ), 'manage_options', 'additional-order-filters-woocommerce', array( $this, 'woaf_show_default_filters_settings' ) );
 
-		add_submenu_page( 'additional-order-filters-woocommerce', __( 'Custom Additional Order Filters', 'woaf-plugin' ), __( 'Custom Additional Order Filters', 'woaf-plugin' ), 'manage_options', 'сustom-additional-order-filters', array( $this, 'woaf_show_custom_filters_settings' ) );
+		add_submenu_page( 'additional-order-filters-woocommerce', __( 'Custom Additional Order Filters', 'woaf-plugin' ), __( 'Custom Additional Order Filters', 'woaf-plugin' ), 'manage_options', 'custom-additional-order-filters', array( $this, 'woaf_show_custom_filters_settings' ) );
 	}
 
 	function woaf_saving_default_filters_settings() {
@@ -130,7 +128,7 @@ class AOF_Woo_Additional_Order_Filters_Admin_Options {
 
 		$output = '<div class="wrap">';
 		$output .= '<h1>'.get_admin_page_title().'</h1>';
-			$output .= '<form action="'.htmlspecialchars($_SERVER['PHP_SELF'], ENT_QUOTES, 'utf-8').'?page=сustom-additional-order-filters&update=true" name="woaf-сustom-additional-order-filters" id="woaf-сustom-additional-order-filters" method="POST">';
+			$output .= '<form action="'.htmlspecialchars($_SERVER['PHP_SELF'], ENT_QUOTES, 'utf-8').'?page=custom-additional-order-filters&update=true" name="woaf-сustom-additional-order-filters" id="woaf-сustom-additional-order-filters" method="POST">';
 				if ( function_exists('wp_nonce_field') ) {
 					$output .= wp_nonce_field('waof_save_custom_filters_settings');
 				}

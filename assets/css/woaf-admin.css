@@ -41,6 +41,9 @@ p.description {
 	display: none;
 	margin-top: 20px;
 }
+.woaf_special_order_filter.opened {
+	display: block;
+}
 .woaf_special_order_filter > ul {
 	display: inline-block;
 	vertical-align: top;
@@ -112,6 +115,10 @@ p.description {
 	display: inline-block;
 	margin-left: 20px;
 	margin-top: 7px;
+}
+.woaf_show_filters_button_wrapper #woaf_show_filters {
+	margin-left: 0;
+	margin-top: 20px;
 }
 .rtl #woaf_show_filters {
 	margin-right: 20px;

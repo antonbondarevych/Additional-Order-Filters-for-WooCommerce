@@ -9,9 +9,7 @@
  * @since     1.11
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
-}
+defined( 'ABSPATH' ) || exit;
 
 /**
  * AOF Main options Class
@@ -24,15 +22,8 @@ if ( ! defined( 'ABSPATH' ) ) {
 class AOF_Woo_Additional_Order_Filters {
 
 	function __construct() {
-		add_action( 'plugins_loaded', array( $this, 'woaf_load_textdomain' ) );
-		add_action( 'admin_enqueue_scripts', array( $this, 'woaf_admin_styles_and_scripts' ) );
-	}
-
-	public static function get_instance() {
-		if ( ! self::$instance ) {
-			self::$instance = new self();
-		}
-		return self::$instance;
+		add_action( 'plugins_loaded', [$this, 'woaf_load_textdomain'] );
+		add_action( 'admin_enqueue_scripts', [$this, 'woaf_admin_styles_and_scripts'] );
 	}
 
 	function woaf_load_textdomain() {
@@ -44,19 +35,21 @@ class AOF_Woo_Additional_Order_Filters {
 	function woaf_admin_styles_and_scripts( $page ) {
 		global $typenow;
 
-		if ( $typenow == 'shop_order' || $page == 'toplevel_page_additional-order-filters-woocommerce' || $page = 'order-filters_page_сustom-additional-order-filters' ) {
+		if ( $typenow === 'shop_order' || $page === 'toplevel_page_additional-order-filters-woocommerce' || $page === 'filters-of-orders_page_custom-additional-order-filters' || $page === 'woocommerce_page_wc-orders' ) {
 			wp_enqueue_style( 'woaf_admin_styles', plugins_url( 'assets/css/woaf-admin.css', dirname( __FILE__ ) ) );
 		}
 
-		if ( $typenow == 'shop_order' ) {
-			wp_enqueue_script( 'woaf_admin_scripts', plugins_url( 'assets/js/woaf-admin-filters.js', dirname( __FILE__ ) ) );
-		}
-		if ( $page == 'toplevel_page_additional-order-filters-woocommerce' || $page = 'order-filters_page_сustom-additional-order-filters' ) {
-			wp_enqueue_script( 'woaf_admin_scripts', plugins_url( 'assets/js/woaf-admin-options.js', dirname( __FILE__ ) ) );
-			wp_set_script_translations( 'woaf_admin_scripts', 'woaf-plugin', WOAF_PLUGIN_DIR . '/languages/' );
+		if ( $typenow === 'shop_order' || $page === 'woocommerce_page_wc-orders' ) {
+			wp_enqueue_script( 'woaf-admin-scripts', plugins_url( 'assets/js/woaf-admin-filters.js', dirname( __FILE__ ) ) );
+			wp_set_script_translations( 'woaf-admin-scripts', 'woaf-plugin', WOAF_PLUGIN_DIR . '/languages/' );
 		}
 
-		if ( $page = 'order-filters_page_сustom-additional-order-filters' ) {
+		if ( $page === 'toplevel_page_additional-order-filters-woocommerce' || $page === 'filters-of-orders_page_custom-additional-order-filters'  ) {
+			wp_enqueue_script( 'woaf-admin-options-scripts', plugins_url( 'assets/js/woaf-admin-options.js', dirname( __FILE__ ) ) );
+			wp_set_script_translations( 'woaf-admin-options-scripts', 'woaf-plugin', WOAF_PLUGIN_DIR . '/languages/' );
+		}
+
+		if ( $page = 'filters-of-orders_page_custom-additional-order-filters' ) {
 			wp_enqueue_script( 'woaf_select2_script', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js' );
 			wp_enqueue_style( 'woaf_select2_styles', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css' );
 		}

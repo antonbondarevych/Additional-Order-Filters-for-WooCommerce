@@ -54,8 +54,6 @@
 						$.woaf_сustom_additional_order_filters.fixRowCounts();
 					}
 				});
-
-				console.log(__('Remove this filter?', 'woaf-plugin'));
 			},
 			initSelect2: function() {
 				var $eventSelect = $('select.select2');

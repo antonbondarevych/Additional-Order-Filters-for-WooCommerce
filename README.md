@@ -1,13 +1,18 @@
 === Additional Order Filters for WooCommerce ===
 Tags: woocommerce, woocommerce filters, woocommerce order, filters, order
-Tested up to: 6.4.2
+Tested up to: 6.5.2
 Requires at least: 4.6
-Stable tag: 1.12
+Requires PHP: 7.0
+Stable tag: 1.20
 Requires WooCommerce at least: 3.0
+Contributors: antonbond
 License: GPLv2 or later
 License URI: https://www.gnu.org/licenses/gpl-2.0.html
 
-Do you have a large WooCommerce store with hunderd or thousands orders? Then this plugin created for you. Additional Order Filters for WooCommerce adds additional filters, with which you can easily and quickly find the orders you need among hundreds of others.
+Do you have a large WooCommerce store with hunderd or thousands orders? Then this plugin created for you. 
+
+== Description ==
+Additional Order Filters for WooCommerce adds additional filters, with which you can easily and quickly find the orders you need among hundreds of others.
 
 Plugin allows you to search by next filters:
 <ul>
@@ -25,6 +30,8 @@ Plugin allows you to search by next filters:
 
 You also can set your own custom order filters based on order meta fields. This can be any order field, including other plugins.
 
+Fully support High-Performance Order Storage of WooCommerce. Support for the previous version of orders (WordPress posts storage (legacy)) also remains.
+
 Absolutely free. Let's try it!
 
 == Installation ==
@@ -33,6 +40,10 @@ Absolutely free. Let's try it!
 2. You can set up your filters in admin dashboard area using Filters of Orders tab
 
 == Frequently Asked Questions ==
+
+= Does it support High-Performance Order Storage? =
+
+Yes, fully supports High-Performance Order Storage of WooCommerce.
 
 = How does search work? =
 
@@ -60,6 +71,11 @@ To contact the author by email antonbondarevych.fruitit@gmail.com
 
 
 == Changelog ==
+
+= 1.20 =
+* Added High-Performance Order Storage support 
+* Code optimization
+* Fixed a bug with getting the current page
 
 = 1.12 =
 * Code optimization

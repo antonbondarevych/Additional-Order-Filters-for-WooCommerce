@@ -1,12 +1,17 @@
 <?php
-if ( ! defined( 'ABSPATH' ) ) exit();
+defined( 'ABSPATH' ) || exit;
+
 /*
 	Plugin Name: Additional Order Filters for WooCommerce
 	Description: Adds additional order filters for WooCommerce
-	Version: 1.12
+	Version: 1.20
+	Requires at least: 6.2
+	Requires PHP: 7.0
 	Author: Anton Bond
 	Author URI: facebook.com/antonbondarevych
 	License: GPL2
+	Text Domain: woaf-plugin
+	Domain Path: /languages
 	 
 	Additional Order Filters for WooCommerce is free software: you can redistribute it and/or modify
 	it under the terms of the GNU General Public License as published by
@@ -33,7 +38,15 @@ if ( in_array( 'woocommerce/woocommerce.php', apply_filters( 'active_plugins', g
 	// load classes
 	require_once( plugin_dir_path( __FILE__ ) . 'includes/class-waof.php' );
 	require_once( plugin_dir_path( __FILE__ ) . 'includes/class-waof-admin-options.php' );
-	require_once( plugin_dir_path( __FILE__ ) . 'includes/class-waof-default-filters.php' );
+
+	//check if HPOS enabled
+	$option = get_option('woocommerce_custom_orders_table_enabled');
+
+	if ( !empty($option) && $option == 'yes' )
+		require_once( plugin_dir_path( __FILE__ ) . 'includes/class-waof-default-filters-hpos-storage.php' );
+	else
+		require_once( plugin_dir_path( __FILE__ ) . 'includes/class-waof-default-filters.php' );
+	
 
 } else {
 	add_action( 'admin_notices', 'woaf_woocoommerce_deactivated' );
@@ -47,5 +60,14 @@ if ( ! function_exists( 'woaf_woocoommerce_deactivated' ) ) {
 	function woaf_woocoommerce_deactivated() {
 		echo '<div class="error"><p>' . sprintf( __( 'Additional Order Filters for WooCommerce %s to be installed and active.', 'woaf-plugin' ), '<a href="https://www.woocommerce.com/" target="_blank">WooCommerce</a>' ) . '</p></div>';
 	}
+}
 
+if (is_admin()) {
+    add_filter('plugin_action_links_' . plugin_basename( __FILE__ ), 'woaf_plugin_settings_link');
+
+	function woaf_plugin_settings_link($links) { 
+		$settings_link = '<a href="admin.php?page=additional-order-filters-woocommerce">Settings</a>'; 
+		array_unshift( $links, $settings_link ); 
+		return $links; 
+	}
 }

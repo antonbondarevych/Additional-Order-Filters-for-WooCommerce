@@ -2,6 +2,7 @@
 
 /**
  * Additional Order Filters for WooCommerce / Defaul filters
+ * This class should called only when HPOS is disabled
  *
  * @package   Additional Order Filters for WooCommerce
  * @author    Anton Bond facebook.com/antonbondarevych
@@ -9,18 +10,7 @@
  * @since     1.11
  */
 
-if ( ! defined( 'ABSPATH' ) ) {
-	exit; // Exit if accessed directly
-}
-
-/**
- * AOF Default Filters Class
- *
- * @package  Additional Order Filters for WooCommerce
- * @author   Anton Bond facebook.com/antonbondarevych
- * @since    1.11
- */
-
+defined( 'ABSPATH' ) || exit;
 
 class AOF_Woo_Additional_Order_Default_Filters {
 
@@ -31,7 +21,8 @@ class AOF_Woo_Additional_Order_Default_Filters {
 	protected $woaf_default_filters;
 	protected $woaf_custom_filters;
 
-	function __construct() {
+	function __construct()
+	{
 		add_action( 'admin_menu', array( $this,'woaf_add_plugin_settings_page' ) );
 
 		$this->woaf_enabled_additional_filters = AOF_Woo_Additional_Order_Filters_Admin_Options::woaf_enabled_additional_filters();
@@ -48,8 +39,8 @@ class AOF_Woo_Additional_Order_Default_Filters {
 
 	function woaf_add_plugin_settings_page() {
 		add_action( 'admin_notices', array( $this, 'waof_woocommerce_settings_check' ) );
-		add_action( 'views_edit-shop_order', array( $this, 'woaf_show_button' ), 2000, 2000 );
-		add_action( 'restrict_manage_posts', array( $this, 'woaf_show_filters' ), 2000, 2000 );
+		add_action( 'views_edit-shop_order', array( $this, 'woaf_show_button' ), 10 );
+		add_action( 'restrict_manage_posts', array( $this, 'woaf_show_filters' ), 15 );
 		add_action( 'posts_where', array( $this, 'woaf_where_plugin_functions' ) );
 		add_filter( 'pre_get_posts', array( $this, 'woaf_filter_date_range' ) );
 		add_filter( 'plugin_action_links_'.plugin_basename( __FILE__ ).'', array( $this, 'waof_plugin_add_settings_link' ) );
@@ -89,14 +80,14 @@ class AOF_Woo_Additional_Order_Default_Filters {
 		}
 
 		$output = '';
-		// $filters = $this->woaf_default_filters;
 		$filters = AOF_Woo_Additional_Order_Filters_Admin_Options::woaf_get_filters();
 		$enabled_filters = $this->woaf_enabled_additional_filters;
 
 		if ( !empty($filters) && !empty($enabled_filters) ) {
 			$output .= '<div class="woaf_special_order_filter_wrapper">';
-			$open = ( isset( $_COOKIE["woaf_additional_order_filter"] ) && $_COOKIE["woaf_additional_order_filter"] == 'open' ) ? 'style="display:block"' : '';
-			$output .= "<div class='woaf_special_order_filter' $open>";
+			$opened = ( isset( $_COOKIE["woaf_additional_order_filter"] ) && $_COOKIE["woaf_additional_order_filter"] == 'open' ) ? 'opened' : '';
+
+			$output .= "<div class='woaf_special_order_filter $opened'>";
 			$per_column = get_option( 'woaf_per_column' );
 			$per_column = ($per_column) ? $per_column : '4';
 			foreach (array_chunk($filters, $per_column, true) as $filter) {
@@ -372,7 +363,7 @@ class AOF_Woo_Additional_Order_Default_Filters {
 				$filter  = trim( sanitize_text_field($_GET['shipping_method_filter']) );
 				$filter  = str_replace(self::$filter_search, self::$filter_replace, $filter);
 				$filter  = $wpdb->_escape($filter);
-				$where  .= " AND $wpdb->posts.ID IN (SELECT ".$wpdb->prefix."woocommerce_order_items.order_id FROM ".$wpdb->prefix."woocommerce_order_items WHERE order_item_type = 'shipping' AND  order_item_name REGEXP '" . $filter . "' )";
+				$where  .= " AND $wpdb->posts.ID IN (SELECT ".$wpdb->prefix."woocommerce_order_items.order_id FROM ".$wpdb->prefix."woocommerce_order_items WHERE order_item_type = 'shipping' AND order_item_name REGEXP '" . $filter . "' )";
 			}
 			if ( isset( $_GET['payment_customer_filter'] ) && !empty( $_GET['payment_customer_filter'] ) ) { // search by payment method
 				$filter = trim( sanitize_text_field($_GET['payment_customer_filter']) );
@@ -466,7 +457,7 @@ class AOF_Woo_Additional_Order_Default_Filters {
 		return $wp_query;
 	}
 
-	function woaf_get_correct_filter_statement( $statement ) {
+	public function woaf_get_correct_filter_statement( $statement ) {
 		switch ($statement) {
 			case 'equal':
 				$statement = 'LIKE';
