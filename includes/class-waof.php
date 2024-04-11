@@ -4,20 +4,12 @@
  * Additional Order Filters for WooCommerce / Main Class
  *
  * @package   Additional Order Filters for WooCommerce
- * @author    Anton Bond facebook.com/antonbondarevych
+ * @author    Anton Bond
  * @license   GPL-2.0+
  * @since     1.11
  */
 
 defined( 'ABSPATH' ) || exit;
-
-/**
- * AOF Main options Class
- *
- * @package  Additional Order Filters for WooCommerce
- * @author   Anton Bond facebook.com/antonbondarevych
- * @since    1.11
- */
 
 class AOF_Woo_Additional_Order_Filters {
 
@@ -49,7 +41,7 @@ class AOF_Woo_Additional_Order_Filters {
 			wp_set_script_translations( 'woaf-admin-options-scripts', 'woaf-plugin', WOAF_PLUGIN_DIR . '/languages/' );
 		}
 
-		if ( $page = 'filters-of-orders_page_custom-additional-order-filters' ) {
+		if ( $page === 'filters-of-orders_page_custom-additional-order-filters' ) {
 			wp_enqueue_script( 'woaf_select2_script', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/js/select2.min.js' );
 			wp_enqueue_style( 'woaf_select2_styles', 'https://cdn.jsdelivr.net/npm/select2@4.1.0-rc.0/dist/css/select2.min.css' );
 		}

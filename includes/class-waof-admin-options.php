@@ -4,20 +4,12 @@
  * Additional Order Filters for WooCommerce / Admin options
  *
  * @package   Additional Order Filters for WooCommerce
- * @author    Anton Bond facebook.com/antonbondarevych
+ * @author    Anton Bond
  * @license   GPL-2.0+
  * @since     1.11
  */
 
 defined( 'ABSPATH' ) || exit;
-
-/**
- * AOF Admin options Class
- *
- * @package  Additional Order Filters for WooCommerce
- * @author   Anton Bond facebook.com/antonbondarevych
- * @since    1.11
- */
 
 class AOF_Woo_Additional_Order_Filters_Admin_Options {
 

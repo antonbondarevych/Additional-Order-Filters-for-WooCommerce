@@ -1,10 +1,8 @@
 <?php
-defined( 'ABSPATH' ) || exit;
-
 /*
 	Plugin Name: Additional Order Filters for WooCommerce
 	Description: Adds additional order filters for WooCommerce
-	Version: 1.20
+	Version: 1.21
 	Requires at least: 6.2
 	Requires PHP: 7.0
 	Author: Anton Bond
@@ -26,6 +24,8 @@ defined( 'ABSPATH' ) || exit;
 	You should have received a copy of the GNU General Public License
 	along with Additional Order Filters for WooCommerce. If not, see https://www.gnu.org/licenses/gpl-2.0.html.
  */
+
+defined( 'ABSPATH' ) || exit;
 
 /**
  * Check if WooCommerce is active

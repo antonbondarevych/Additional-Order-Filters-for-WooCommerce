@@ -3,7 +3,7 @@ Tags: woocommerce, woocommerce filters, woocommerce order, filters, order
 Tested up to: 6.5.2
 Requires at least: 4.6
 Requires PHP: 7.0
-Stable tag: 1.20
+Stable tag: 1.21
 Requires WooCommerce at least: 3.0
 Contributors: antonbond
 License: GPLv2 or later
@@ -71,6 +71,9 @@ To contact the author by email antonbondarevych.fruitit@gmail.com
 
 
 == Changelog ==
+
+= 1.21 =
+* Fixed a bug with getting the current admin page
 
 = 1.20 =
 * Added High-Performance Order Storage support 
