@@ -138,19 +138,17 @@ class AOF_Woo_Additional_Order_Filters_Admin_Options {
 						$i = 0;
 						foreach ($filters as $count => $filter) {
 							$output .= '<tr>';
-								$output .= '<td><input type="text" data-name="filter-name" name="filter_rows['.$i.'][filter-name]" value="'.$filter['filter-name'].'" placeholder="Filter name"></td>';
+								$output .= '<td><input type="text" data-name="filter-name" name="filter_rows['.$i.'][filter-name]" value="' . esc_attr( $filter['filter-name'] ) . '" placeholder="Filter name"></td>';
 								$output .= '<td class="text-center"><select data-name="filter-statement" name="filter_rows['.$i.'][filter-statement]">';
-									foreach ($statements as $key => $stat) {
-										if ( $filter['filter-statement'] == $key ) 
-											$output .= '<option value="'.$key.'" selected="selected">'.$stat.'</option>';
-										else
-											$output .= '<option value="'.$key.'">'.$stat.'</option>';
+									foreach ( $statements as $key => $stat ) {
+										$selected = ( $filter['filter-statement'] == $key ) ? ' selected="selected"' : '';
+										$output .= '<option value="' . esc_attr( $key ) . '"' . $selected . '>' . esc_html( $stat ) . '</option>';
 									}
 								$output .= '</select></td>';
 								$output .= '<td><select class="select2" data-name="filter-field" name="filter_rows['.$i.'][filter-field]" id="filter_rows['.$i.'][filter-field]">';
 
 									if ( $filter['filter-field'] ) {
-										$output .= '<option value="'.$filter['filter-field'].'" selected="selected">'.$filter['filter-field'].'</option>';
+										$output .= '<option value="' . esc_attr( $filter['filter-field'] ) . '" selected="selected">' . esc_html( $filter['filter-field'] ) . '</option>';
 									}
 
 									$output .= '</select></td>';

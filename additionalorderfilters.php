@@ -2,7 +2,7 @@
 /*
 	Plugin Name: Additional Order Filters for WooCommerce
 	Description: Adds additional order filters for WooCommerce
-	Version: 1.21
+	Version: 1.23
 	Requires at least: 6.2
 	Requires PHP: 7.0
 	Author: Anton Bond

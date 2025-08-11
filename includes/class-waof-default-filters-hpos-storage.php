@@ -92,7 +92,8 @@ class AOF_Woo_Additional_Order_Default_Filters_HPOS_Storage {
                                 $output .= "</div>";
                             endif;
                             if ( $filter['id'] == 'payment_method' ) :
-                                $selected = ( isset($_GET['payment_customer_filter']) ) ? sanitize_text_field($_GET['payment_customer_filter']) : '';
+                                $selected = ( isset($_GET['payment_customer_filter']) ) ? $this->woaf_sanitize_get_parameter($_GET['payment_customer_filter']) : '';
+                                
                                 $gateways = WC()->payment_gateways->payment_gateways();
                                 $output .= '<div class="order_block_wrapper">';
                                 $output .= '<label for="payment_customer_filter">'.$filter["name"].'</label>';
@@ -111,9 +112,12 @@ class AOF_Woo_Additional_Order_Default_Filters_HPOS_Storage {
                                 $output .= '</div>';
                             endif;
                             if ( $filter['id'] == 'customer_group' ) :
-                                $selected = ( isset($_GET['nonregistered_users_filter']) ) ? sanitize_text_field($_GET['nonregistered_users_filter']) : '';
+                                
+                                $selected = ( isset($_GET['nonregistered_users_filter']) ) ? $this->woaf_sanitize_get_parameter($_GET['nonregistered_users_filter']) : '';
+
                                 if ( $selected == 'nonregistered_users' ) $selected = 'selected';
                                 $selected_reg = ( $selected == 'registered_users' ) ? 'selected' : '';
+
                                 $output .= '<div class="order_block_wrapper">';
                                 $output .= '<label for="nonregistered_users_filter">'.$filter["name"].'</label>';
                                 $output .= '<select name="nonregistered_users_filter" id="nonregistered_users_filter">';
@@ -125,42 +129,54 @@ class AOF_Woo_Additional_Order_Default_Filters_HPOS_Storage {
                             endif;
                             if ( $filter['id'] == 'shipping_method' ) :
                                 $output .= '<div class="order_block_wrapper">';
-                                    $shipping_method_filter = (isset( $_GET['shipping_method_filter'] )) ? sanitize_text_field($_GET['shipping_method_filter']) : '';
+
+                                $shipping_method_filter = (isset( $_GET['shipping_method_filter'] )) ? $this->woaf_sanitize_get_parameter($_GET['shipping_method_filter']) : '';
+
                                 $output .= '<label for="shipping_method_filter">'.$filter["name"].'</label>';
                                 $output .= '<input type="text" value="'.$shipping_method_filter.'" name="shipping_method_filter" id="shipping_method_filter">';
                                 $output .= '</div>';
                             endif;
                             if ( $filter['id'] == 'customer_email' ) :
                                 $output .= '<div class="order_block_wrapper">';
-                                    $user_email_search = (isset( $_GET['user_email_search'] )) ? sanitize_text_field($_GET['user_email_search']) : '';
+
+                                $user_email_search = (isset( $_GET['user_email_search'] )) ? $this->woaf_sanitize_get_parameter($_GET['user_email_search']) : '';
+
                                 $output .= '<label for="user_email_search">'.$filter["name"].'</label>';
                                 $output .= '<input type="text" value="'.$user_email_search.'" name="user_email_search" id="user_email_search">';
                                 $output .= '</div>';
                             endif;
                             if ( $filter['id'] == 'customer_first_name' ) :
                                 $output .= '<div class="order_block_wrapper">';
-                                    $user_billing_first_name = (isset( $_GET['user_billing_first_name'] )) ? sanitize_text_field($_GET['user_billing_first_name']) : '';
+                                
+                                $user_billing_first_name = (isset( $_GET['user_billing_first_name'] )) ? $this->woaf_sanitize_get_parameter($_GET['user_billing_first_name']) : '';
+
                                 $output .= '<label for="user_billing_first_name">'.$filter["name"].'</label>';
                                 $output .= '<input type="text" value="'.$user_billing_first_name.'" name="user_billing_first_name" id="user_billing_first_name">';
                                 $output .= '</div>';
                             endif;
                             if ( $filter['id'] == 'customer_last_name' ) :
                                 $output .= '<div class="order_block_wrapper">';
-                                    $user_billing_last_name = (isset( $_GET['user_billing_last_name'] )) ? sanitize_text_field($_GET['user_billing_last_name']) : '';
+
+                                $user_billing_last_name = (isset( $_GET['user_billing_last_name'] )) ? $this->woaf_sanitize_get_parameter($_GET['user_billing_last_name']) : '';
+
                                 $output .= '<label for="user_billing_last_name">'.$filter["name"].'</label>';
                                 $output .= '<input type="text" value="'.$user_billing_last_name.'" name="user_billing_last_name" id="user_billing_last_name">';
                                 $output .= '</div>';
                             endif;
                             if ( $filter['id'] == 'customer_billing_address' ) :
                                 $output .= '<div class="order_block_wrapper">';
-                                    $user_billing_address = (isset( $_GET['user_billing_address'] )) ? sanitize_text_field($_GET['user_billing_address']) : '';
+                                
+                                $user_billing_address = (isset( $_GET['user_billing_address'] )) ? $this->woaf_sanitize_get_parameter($_GET['user_billing_address']) : '';
+
                                 $output .= '<label for="user_billing_address">'.$filter["name"].'</label>';
                                 $output .= '<input type="text" value="'.$user_billing_address.'" name="user_billing_address" id="user_billing_address">';
                                 $output .= '</div>';
                             endif;
                             if ( $filter['id'] == 'billing_country' ) :
                                 $output .= '<div class="order_block_wrapper">';
-                                    $user_billing_country = (isset( $_GET['user_billing_country'] )) ? sanitize_text_field($_GET['user_billing_country']) : '';
+
+                                    $user_billing_country = (isset( $_GET['user_billing_country'] )) ? $this->woaf_sanitize_get_parameter($_GET['user_billing_country']) : '';
+                                    
                                     $output .= '<label for="order_statuses">'.$filter["name"].'</label>';
                                     $output .= '<select id="user_billing_country" class="order_statuses_select" name="user_billing_country[]" multiple="multiple">';
                                         $woo_countries = new WC_Countries();
@@ -177,21 +193,27 @@ class AOF_Woo_Additional_Order_Default_Filters_HPOS_Storage {
                             endif;
                             if ( $filter['id'] == 'customer_phone' ) :
                                 $output .= '<div class="order_block_wrapper">';
-                                    $user_phone = (isset( $_GET['user_phone'] )) ? sanitize_text_field($_GET['user_phone']) : '';
+
+                                $user_phone = (isset( $_GET['user_phone'] )) ? $this->woaf_sanitize_get_parameter($_GET['user_phone']) : '';
+
                                 $output .= '<label for="user_phone">'.$filter["name"].'</label>';
                                 $output .= '<input type="text" value="'.$user_phone.'" name="user_phone" id="user_phone">';
                                 $output .= '</div>';
                             endif;
                             if ( $filter['id'] == 'track_number' ) :
                                 $output .= '<div class="order_block_wrapper">';
-                                    $shpping_track_number = (isset( $_GET['shpping_track_number'] )) ? sanitize_text_field($_GET['shpping_track_number']) : '';
+
+                                $shpping_track_number = (isset( $_GET['shpping_track_number'] )) ? $this->woaf_sanitize_get_parameter($_GET['shpping_track_number']) : '';
+
                                 $output .= '<label for="shpping_track_number">'.$filter["name"].'</label>';
                                 $output .= '<input type="text" value="'.$shpping_track_number.'" name="shpping_track_number" id="shpping_track_number">';
                                 $output .= '</div>';
                             endif;
                             if ( $filter['id'] == 'search_by_sku' ) :
                                 $output .= '<div class="order_block_wrapper">';
-                                    $woaf_filter_search_sku = (isset( $_GET['woaf_filter_search_sku'] )) ? sanitize_text_field($_GET['woaf_filter_search_sku']) : '';
+
+                                $woaf_filter_search_sku = (isset( $_GET['woaf_filter_search_sku'] )) ? $this->woaf_sanitize_get_parameter($_GET['woaf_filter_search_sku']) : '';
+
                                 $output .= '<label for="woaf_filter_search_sku">'.$filter["name"].'</label>';
                                 $output .= '<input type="text" value="'.$woaf_filter_search_sku.'" name="woaf_filter_search_sku" id="woaf_filter_search_sku">';
                                 $output .= '</div>';
@@ -199,16 +221,16 @@ class AOF_Woo_Additional_Order_Default_Filters_HPOS_Storage {
                             if ( $filter['id'] == 'orders_by_date_range' ) :
                                 $output .= '<div class="order_block_wrapper date_range">';
                                 $output .= '<label for="woaf_filter_start_date">'.$filter["name"].'</label>';
-                                $from = ( isset($_GET['woaf_filter_start_date']) ) ? sanitize_text_field( $_GET['woaf_filter_start_date'] ) : '';
-                                $to   = ( isset($_GET['woaf_filter_end_date']) ) ? sanitize_text_field( $_GET['woaf_filter_end_date'] ) : '';
+                                $from = ( isset($_GET['woaf_filter_start_date']) ) ? $this->woaf_sanitize_get_parameter( $_GET['woaf_filter_start_date'] ) : '';
+                                $to   = ( isset($_GET['woaf_filter_end_date']) ) ? $this->woaf_sanitize_get_parameter( $_GET['woaf_filter_end_date'] ) : '';
                                 $output .= '<input type="text" id="woaf_filter_start_date" name="woaf_filter_start_date" value="'.$from.'" placeholder="'.__( 'Start date', 'woaf-plugin' ).'">';
                                 $output .= '<input type="text" id="woaf_filter_end_date" value="'.$to.'" name="woaf_filter_end_date" placeholder="'.__( 'End date', 'woaf-plugin' ).'">';
                                 $output .= '</div>';
                             endif;
                             if ( $filter['id'] == 'filter_order_total' ) :
                                 $output .= '<div class="order_block_wrapper order_total">';
-                                $order_total_start = (isset( $_GET['order_total_start'] )) ? sanitize_text_field($_GET['order_total_start']) : '';
-                                $order_total_end = (isset( $_GET['order_total_end'] )) ? sanitize_text_field($_GET['order_total_end']) : '';
+                                $order_total_start = (isset( $_GET['order_total_start'] )) ? $this->woaf_sanitize_get_parameter($_GET['order_total_start']) : '';
+                                $order_total_end = (isset( $_GET['order_total_end'] )) ? $this->woaf_sanitize_get_parameter($_GET['order_total_end']) : '';
                                 $output .= '<label for="order_total_start">'.$filter["name"].'';
                                     $output .= '<div class="inline">';
                                         $output .= '<label for="order_total_start">'.__( 'from:', 'woaf-plugin' ).'</label>';
@@ -235,7 +257,9 @@ class AOF_Woo_Additional_Order_Default_Filters_HPOS_Storage {
                             $output .= '<div class="inline_block">';
                             foreach ($filter as $filter) {
                                 $output .= '<div class="order_block_wrapper">';
-                                    $filter_search = (isset( $_GET[$filter['filter-field']] )) ? sanitize_text_field($_GET[$filter['filter-field']]) : '';
+
+                                $filter_search = (isset( $_GET[$filter['filter-field']] )) ? $this->woaf_sanitize_get_parameter($_GET[$filter['filter-field']]) : '';
+                                    
                                 $output .= '<label for="user-filter-'.$filter['filter-field'].'-'.$count.'">'.$filter["filter-name"].'</label>';
                                 $output .= '<input type="text" value="'.$filter_search.'" name="'.$filter['filter-field'].'" id="user-filter-'.$filter['filter-field'].'-'.$count.'">';
                                 $output .= '</div>';
@@ -269,23 +293,23 @@ class AOF_Woo_Additional_Order_Default_Filters_HPOS_Storage {
         //order status
         if ( isset($get['post_status']) && !empty($get['post_status']) && is_array($get['post_status']) ) {
             foreach ($get['post_status'] as $key => $value) {
-                $query_vars['post_status'][] = sanitize_text_field($value);
+                $query_vars['post_status'][] = $this->woaf_sanitize_get_parameter($value);
             }
         }
 
         //payment_customer_filter
         if ( isset($get['payment_customer_filter']) && !empty($get['payment_customer_filter']) ) {
-            $query_vars['payment_method'] = sanitize_text_field($get['payment_customer_filter']);
+            $query_vars['payment_method'] = $this->woaf_sanitize_get_parameter($get['payment_customer_filter']);
         }
     
         //user_email_search
         if ( isset($get['user_email_search']) && $get['user_email_search'] !== '' ) {
-            $query_vars['billing_email'] = sanitize_text_field($get['user_email_search']);
+            $query_vars['billing_email'] = $this->woaf_sanitize_get_parameter($get['user_email_search']);
         }
     
         if ( isset($get['woaf_filter_start_date']) && isset($get['woaf_filter_end_date']) ) {
-			$from = explode( '/', sanitize_text_field( $_GET['woaf_filter_start_date'] ) );
-			$to   = explode( '/', sanitize_text_field( $_GET['woaf_filter_end_date'] ) );
+			$from = explode( '/', $this->woaf_sanitize_get_parameter( $_GET['woaf_filter_start_date'] ) );
+			$to   = explode( '/', $this->woaf_sanitize_get_parameter( $_GET['woaf_filter_end_date'] ) );
 
 			$from = array_map( 'intval', $from );
 			$to   = array_map( 'intval', $to );
@@ -314,17 +338,17 @@ class AOF_Woo_Additional_Order_Default_Filters_HPOS_Storage {
 
         //user_billing_first_name
         if ( isset($get['user_billing_first_name']) && $get['user_billing_first_name'] !== '' ) {
-            $query_vars['billing_first_name'] = sanitize_text_field($get['user_billing_first_name']);
+            $query_vars['billing_first_name'] = $this->woaf_sanitize_get_parameter($get['user_billing_first_name']);
         }
 
         //user_billing_last_name
         if ( isset($get['user_billing_last_name']) && $get['user_billing_last_name'] !== '' ) {
-            $query_vars['billing_last_name'] = sanitize_text_field($get['user_billing_last_name']);
+            $query_vars['billing_last_name'] = $this->woaf_sanitize_get_parameter($get['user_billing_last_name']);
         }
 
         //user_billing_address
         if ( isset($get['user_billing_address']) && $get['user_billing_address'] !== '' ) {
-            $query_vars['_billing_address_1'] = sanitize_text_field($get['user_billing_address']);
+            $query_vars['_billing_address_1'] = $this->woaf_sanitize_get_parameter($get['user_billing_address']);
         }
         
 		//handle custom user filters
@@ -332,7 +356,7 @@ class AOF_Woo_Additional_Order_Default_Filters_HPOS_Storage {
             $query_vars['meta_query'] = ['relation' => 'OR'];
             foreach ($this->woaf_custom_filters as $user_filter) {
                 if ( isset( $get[$user_filter['filter-field']] ) && !empty( $get[$user_filter['filter-field']] ) ) {
-                    $filter = sanitize_text_field( $get[$user_filter['filter-field']]);
+                    $filter = $this->woaf_sanitize_get_parameter( $get[$user_filter['filter-field']]);
                     $filter = str_replace(self::$filter_search, self::$filter_replace, $filter);
 
                     $query_vars['meta_query'][] = [
@@ -356,8 +380,8 @@ class AOF_Woo_Additional_Order_Default_Filters_HPOS_Storage {
 
         //order total range
         if ( isset( $get['order_total_start'] ) && !empty( $get['order_total_start'] ) || isset( $get['order_total_end'] ) && !empty( $get['order_total_end'] ) ) {
-            $start =  sanitize_text_field($get['order_total_start']);
-            $end   =  sanitize_text_field($get['order_total_end']);
+            $start =  $this->woaf_sanitize_get_parameter($get['order_total_start']);
+            $end   =  $this->woaf_sanitize_get_parameter($get['order_total_end']);
 
             $start = " AND {$wpdb->prefix}wc_orders.total_amount >= '$start'";
             $end   = " AND wp_wc_orders.total_amount <= '$end'";
@@ -374,13 +398,13 @@ class AOF_Woo_Additional_Order_Default_Filters_HPOS_Storage {
 
         // shipping_method_filter
         if ( isset($get['shipping_method_filter']) && $get['shipping_method_filter'] !== '' ) {
-            $shipping_method = sanitize_text_field($get['shipping_method_filter']);
+            $shipping_method = $this->woaf_sanitize_get_parameter($get['shipping_method_filter']);
             $clauses['where'] .= " AND {$wpdb->prefix}wc_orders.id IN (SELECT ".$wpdb->prefix."woocommerce_order_items.order_id FROM ".$wpdb->prefix."woocommerce_order_items WHERE order_item_type = 'shipping' AND order_item_name REGEXP '".$shipping_method."' )";
         }
 
         // search by track number
         if ( isset( $get['shpping_track_number'] ) && $get['shpping_track_number'] !== '' ) { 
-            $filter  = trim( sanitize_text_field($get['shpping_track_number']) );
+            $filter  = trim( $this->woaf_sanitize_get_parameter($get['shpping_track_number']) );
             $filter  = str_replace(self::$filter_search, self::$filter_replace, $filter);
             $filter  = $wpdb->_escape($filter);
             if ( is_plugin_active( 'woocommerce-shipment-tracking/shipment-tracking.php' ) ) {
@@ -419,7 +443,11 @@ class AOF_Woo_Additional_Order_Default_Filters_HPOS_Storage {
             return false;
         elseif ( is_admin() && $pagenow == 'admin.php' && $_GET['page'] === 'wc-orders' )
             return true;
+    }
 
+    function woaf_sanitize_get_parameter($parameter)
+    {
+        return esc_attr( sanitize_text_field( $parameter ) );
     }
 
 }
